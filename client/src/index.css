@@ -1,0 +1,503 @@
+/* ===================================================================
+   CivicAI design tokens
+   Palette: municipal navy + civic-seal gold on cool paper stock.
+   Type: Public Sans (the U.S. Web Design System's own typeface — a
+   deliberate nod to government-service typography) for display & body,
+   JetBrains Mono for case numbers and data.
+   Signature element: the "case stamp" — issue status rendered like an
+   official rubber stamp, because every report here becomes a numbered
+   civic record, not just a ticket.
+   =================================================================== */
+
+:root {
+  --ink-900: #142238;
+  --ink-800: #1d3153;
+  --ink-700: #2c4677;
+  --ink-100: #e7ebf2;
+
+  --paper: #f3f4f0;
+  --paper-raised: #ffffff;
+
+  --seal-gold: #b8862f;
+  --seal-gold-dark: #8f6a24;
+
+  --signal-slate: #5b6472;
+  --signal-blue: #2b5fa8;
+  --signal-amber: #b8862f;
+  --signal-green: #2f7a4f;
+  --signal-red: #a33d3d;
+
+  --border: #d8dad2;
+  --border-strong: #b9bdb0;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
+  --font-display: "Public Sans", system-ui, sans-serif;
+  --font-body: "Public Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --shadow-card: 0 1px 2px rgba(20, 34, 56, 0.06), 0 4px 12px rgba(20, 34, 56, 0.05);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink-900);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--ink-900);
+  margin: 0 0 0.5em;
+  letter-spacing: -0.01em;
+}
+
+h1 { font-size: 2.25rem; font-weight: 800; }
+h2 { font-size: 1.5rem; font-weight: 700; }
+h3 { font-size: 1.125rem; font-weight: 600; }
+
+p { margin: 0 0 1em; color: var(--ink-800); }
+
+a {
+  color: var(--ink-700);
+  text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+button, input, textarea, select {
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--seal-gold);
+  outline-offset: 2px;
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---------- Layout shell ---------- */
+
+.app-shell {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  padding: 40px 0 64px;
+}
+
+/* ---------- Navbar ---------- */
+
+.navbar {
+  background: var(--ink-900);
+  border-bottom: 3px solid var(--seal-gold);
+}
+
+.navbar-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.15rem;
+}
+
+.brand-mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--seal-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--seal-gold);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-links a, .nav-links button {
+  color: var(--ink-100);
+  background: none;
+  border: none;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.nav-links a:hover, .nav-links button:hover {
+  background: var(--ink-800);
+  text-decoration: none;
+}
+
+.nav-links a.active {
+  background: var(--ink-700);
+  color: #fff;
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--ink-900);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--ink-700); }
+
+.btn-gold {
+  background: var(--seal-gold);
+  color: #fff;
+}
+.btn-gold:hover { background: var(--seal-gold-dark); }
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--border-strong);
+  color: var(--ink-900);
+}
+.btn-outline:hover { border-color: var(--ink-900); }
+
+.btn-danger-outline {
+  background: transparent;
+  border-color: var(--signal-red);
+  color: var(--signal-red);
+}
+
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ---------- Cards / forms ---------- */
+
+.card {
+  background: var(--paper-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 24px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.field label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ink-800);
+}
+
+.field input,
+.field textarea,
+.field select {
+  padding: 10px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--ink-900);
+}
+
+.field textarea { resize: vertical; min-height: 100px; }
+
+.form-error {
+  background: #fbeaea;
+  border: 1px solid var(--signal-red);
+  color: var(--signal-red);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.form-note {
+  font-size: 0.85rem;
+  color: var(--signal-slate);
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 48px;
+  align-items: center;
+  padding: 48px 0 64px;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--seal-gold-dark);
+  margin-bottom: 12px;
+}
+
+.hero h1 { font-size: 2.75rem; }
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.hero-panel {
+  background: var(--ink-900);
+  border-radius: var(--radius-md);
+  padding: 28px;
+  color: var(--ink-100);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px dashed rgba(184, 134, 47, 0.35);
+  margin: 10px;
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+}
+
+.hero-panel h3 { color: #fff; }
+
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 48px;
+}
+
+.pillar {
+  border-top: 3px solid var(--seal-gold);
+  padding-top: 14px;
+}
+
+.pillar .pillar-index {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--signal-slate);
+}
+
+@media (max-width: 780px) {
+  .hero { grid-template-columns: 1fr; }
+  .pillars { grid-template-columns: 1fr; }
+}
+
+/* ---------- Case stamp (signature element) ---------- */
+
+.case-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 2px solid currentColor;
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transform: rotate(-1.5deg);
+  white-space: nowrap;
+}
+
+.case-stamp.status-submitted { color: var(--signal-slate); }
+.case-stamp.status-in_review { color: var(--signal-blue); }
+.case-stamp.status-in_progress { color: var(--signal-amber); }
+.case-stamp.status-resolved { color: var(--signal-green); }
+
+.case-number {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--signal-slate);
+}
+
+/* ---------- Issue / service cards ---------- */
+
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.item-card {
+  background: var(--paper-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.category-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-700);
+  background: var(--ink-100);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.status-select {
+  margin-top: 8px;
+}
+
+/* ---------- Filters bar ---------- */
+
+.filters-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.filters-bar select, .filters-bar input {
+  padding: 8px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: #fff;
+}
+
+/* ---------- AI companion ---------- */
+
+.chat-shell {
+  display: flex;
+  flex-direction: column;
+  height: 70vh;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--paper-raised);
+  overflow: hidden;
+}
+
+.chat-log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.chat-bubble {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.chat-bubble.user {
+  align-self: flex-end;
+  background: var(--ink-900);
+  color: #fff;
+  border-bottom-right-radius: 2px;
+}
+
+.chat-bubble.assistant {
+  align-self: flex-start;
+  background: var(--ink-100);
+  color: var(--ink-900);
+  border-bottom-left-radius: 2px;
+}
+
+.chat-input-row {
+  display: flex;
+  gap: 10px;
+  padding: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.chat-input-row input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--signal-slate);
+  padding: 48px 20px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 24px 0;
+  color: var(--signal-slate);
+  font-size: 0.85rem;
+}
