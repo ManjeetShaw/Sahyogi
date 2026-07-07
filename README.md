@@ -31,14 +31,14 @@ This is the real, working state of the codebase today (not the full long-term vi
 ```
 Sahyogi/
 │
-├── client/                 # React + Vite app
+├── frontend/                # React + Vite app
 │   └── src/
 │       ├── api/            # axios instance
 │       ├── components/     # Navbar, IssueCard, ProtectedRoute, StatusStamp
 │       ├── context/         # AuthContext
 │       └── pages/          # Home, Login, Register, Issues, ReportIssue, Services, AICompanion, NotFound
 │
-├── server/                 # Express API
+├── backend/                 # Express API
 │   └── src/
 │       ├── config/         # db.js (Mongo connection)
 │       ├── controllers/    # auth, issue, service, ai
@@ -70,7 +70,7 @@ cd Sahyogi
 ### Backend setup
 
 ```bash
-cd server
+cd backend
 npm install
 cp .env.example .env
 ```
@@ -95,7 +95,7 @@ npm run dev
 ### Frontend setup
 
 ```bash
-cd client
+cd frontend
 npm install
 npm run dev
 ```
@@ -111,7 +111,7 @@ docker-compose up --build
 ### Seed sample government services
 
 ```bash
-npm run seed --prefix server
+npm run seed --prefix backend
 ```
 
 ---

@@ -1,5 +1,5 @@
 {
-  "name": "civicai-server",
+  "name": "civicai-backend",
   "version": "1.0.0",
   "private": true,
   "description": "CivicAI API server (Express + MongoDB + Claude AI companion)",
