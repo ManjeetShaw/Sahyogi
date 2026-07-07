@@ -1,5 +1,5 @@
 // Seeds a handful of realistic government services so the app is usable
-// out of the box. Run with: npm run seed --prefix server
+// out of the box. Run with: npm run seed --prefix backend
 import dotenv from "dotenv";
 dotenv.config();
 

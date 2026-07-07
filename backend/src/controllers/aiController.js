@@ -6,7 +6,7 @@ let anthropic = null;
 function getClient() {
   if (!process.env.ANTHROPIC_API_KEY) {
     throw new Error(
-      "ANTHROPIC_API_KEY is not set on the server. Add it to server/.env to enable the AI companion."
+      "ANTHROPIC_API_KEY is not set on the server. Add it to backend/.env to enable the AI companion."
     );
   }
   if (!anthropic) {
@@ -15,7 +15,7 @@ function getClient() {
   return anthropic;
 }
 
-const SYSTEM_PROMPT = `You are the CivicAI companion, a plain-language assistant that helps
+const SYSTEM_PROMPT = `You are the Sahyogi companion, a plain-language assistant that helps
 citizens understand government services and figure out how to report public issues
 (like potholes, garbage collection, streetlight outages, or water supply problems).
 

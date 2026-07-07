@@ -80,7 +80,7 @@ Fill in `.env`:
 ```env
 PORT=5000
 NODE_ENV=development
-MONGO_URI=mongodb://localhost:27017/civicai
+MONGO_URI=mongodb://localhost:27017/sahyogi
 JWT_SECRET=replace_with_a_long_random_string
 JWT_EXPIRES_IN=7d
 ANTHROPIC_API_KEY=your_anthropic_api_key_here

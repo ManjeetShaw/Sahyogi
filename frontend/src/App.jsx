@@ -49,7 +49,7 @@ export default function App() {
         </Routes>
       </main>
       <footer className="footer">
-        <div className="container">CivicAI — an open, community-driven civic platform.</div>
+        <div className="container">Sahyogi — an open, community-driven civic platform.</div>
       </footer>
     </div>
   );

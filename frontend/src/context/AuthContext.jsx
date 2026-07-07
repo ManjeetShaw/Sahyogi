@@ -8,7 +8,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("civicai_token");
+    const token = localStorage.getItem("sahyogi_token");
     if (!token) {
       setLoading(false);
       return;
@@ -16,24 +16,24 @@ export function AuthProvider({ children }) {
     api
       .get("/auth/me")
       .then((res) => setUser(res.data.user))
-      .catch(() => localStorage.removeItem("civicai_token"))
+      .catch(() => localStorage.removeItem("sahyogi_token"))
       .finally(() => setLoading(false));
   }, []);
 
   async function login(email, password) {
     const res = await api.post("/auth/login", { email, password });
-    localStorage.setItem("civicai_token", res.data.token);
+    localStorage.setItem("sahyogi_token", res.data.token);
     setUser(res.data.user);
   }
 
   async function register(name, email, password) {
     const res = await api.post("/auth/register", { name, email, password });
-    localStorage.setItem("civicai_token", res.data.token);
+    localStorage.setItem("sahyogi_token", res.data.token);
     setUser(res.data.user);
   }
 
   function logout() {
-    localStorage.removeItem("civicai_token");
+    localStorage.removeItem("sahyogi_token");
     setUser(null);
   }
 

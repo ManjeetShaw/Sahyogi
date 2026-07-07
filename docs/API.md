@@ -1,4 +1,4 @@
-# CivicAI API Reference
+# Sahyogi API Reference
 
 Base URL (dev): `http://localhost:5000/api`
 

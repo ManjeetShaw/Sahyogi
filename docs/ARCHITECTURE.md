@@ -1,8 +1,8 @@
-# CivicAI Architecture
+# Sahyogi Architecture
 
 ## Overview
 
-CivicAI is a MERN-stack (MongoDB, Express, React, Node) application with
+Sahyogi is a MERN-stack (MongoDB, Express, React, Node) application with
 three main pillars:
 
 1. **Government services directory** — a searchable list of services
@@ -35,15 +35,15 @@ three main pillars:
 
 ## Folder responsibilities
 
-- `client/` — Vite + React SPA. Talks only to `server`'s REST API.
-- `server/` — Express REST API. Owns all business logic, auth, and the only
+- `frontend/` — Vite + React SPA. Talks only to `backend`'s REST API.
+- `backend/` — Express REST API. Owns all business logic, auth, and the only
   code that holds the Anthropic API key.
 - `docs/` — architecture notes, API reference.
 
 ## Auth
 
 JWT-based. Token issued on login/register, sent as `Authorization: Bearer`
-header, verified by `server/src/middleware/auth.js`. Roles: `citizen`,
+header, verified by `backend/src/middleware/auth.js`. Roles: `citizen`,
 `staff`, `admin` — role gates issue-status updates and service management.
 
 ## Why the AI key stays server-side

@@ -8,7 +8,7 @@ export default function Home() {
     <div className="container">
       <section className="hero">
         <div>
-          <div className="hero-eyebrow">CIVICAI — CASE 000001 AND COUNTING</div>
+          <div className="hero-eyebrow">SAHYOGI — CASE 000001 AND COUNTING</div>
           <h1>Government services and public issues, handled in plain language.</h1>
           <p>
             Find the right service, file a report on a broken streetlight or a pothole,
