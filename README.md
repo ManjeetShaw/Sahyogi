@@ -1,111 +1,171 @@
-# CivicAI
+# Sahyogi 🇮🇳
 
-CivicAI is a GenAI-powered web platform that helps citizens **access
-government services**, **report public issues**, and get **plain-language
-help from an AI companion** — grounded in the platform's own services data
-instead of invented answers.
+> **Your Intelligent Government Companion**
 
-## Features
+Sahyogi (working codename **SarkarSaathi AI**) is a citizen platform that simplifies access to government services — letting people report civic issues, browse government services, and get help from an AI companion, all in one place.
 
-- 🗂️ **Services directory** — searchable, filterable list of government
-  services (documents, permits, welfare schemes, utilities, taxes).
-- 📍 **Issue reporting** — citizens file reports (roads, sanitation, water,
-  electricity, public safety, parks) with a category, location, and photo
-  link; each report gets a case number and moves through
-  `submitted → in_review → in_progress → resolved`.
-- 🤖 **AI companion** — a chat assistant (powered by the Claude API,
-  called server-side) that answers using the services actually listed on
-  the platform, and points people toward filing a report when that's what
-  they need.
-- 🔐 **Auth & roles** — JWT auth with `citizen`, `staff`, and `admin` roles;
-  only staff/admin can advance an issue's status or manage services.
+> Built with accessibility, transparency, and digital inclusion in mind.
 
-## Tech stack
+---
 
-- **Client:** React 18 + Vite, React Router, plain CSS design system
-- **Server:** Node.js + Express + MongoDB (Mongoose)
-- **AI:** Anthropic Claude API (server-side only — the key never reaches
-  the browser)
-- **Auth:** JWT + bcrypt
+## ✅ Currently Implemented
 
-## Project structure
+This is the real, working state of the codebase today (not the full long-term vision below):
+
+- **AI Companion Chat** — citizens can ask natural-language questions and get answers grounded in the platform's own services data, powered by the Anthropic Claude API
+- **Issue Reporting** — citizens can submit civic issues (potholes, garbage, water supply, etc.) with category, description, and location; status tracked (submitted → in progress → resolved)
+- **Government Services Directory** — searchable list of services/schemes with descriptions, required documents, and eligibility info
+- **Authentication** — JWT-based register/login, protected routes on the client
+- **REST API** — Express + MongoDB (Mongoose) backend with proper error handling, rate limiting, and CORS
+
+## 🛠 Tech Stack (Actual)
+
+**Frontend:** React (Vite), React Router, Axios, plain CSS
+**Backend:** Node.js, Express.js, MongoDB + Mongoose, JWT auth, bcrypt, express-rate-limit, morgan
+**AI:** Anthropic Claude API (`@anthropic-ai/sdk`), server-side only — the API key never touches the client
+
+---
+
+## 📂 Project Structure (Actual)
 
 ```
-CivicAI/
-├── client/          # React SPA
-├── server/          # Express REST API
-├── docs/            # Architecture & API docs
-├── .github/         # CI workflow
+Sahyogi/
+│
+├── client/                 # React + Vite app
+│   └── src/
+│       ├── api/            # axios instance
+│       ├── components/     # Navbar, IssueCard, ProtectedRoute, StatusStamp
+│       ├── context/         # AuthContext
+│       └── pages/          # Home, Login, Register, Issues, ReportIssue, Services, AICompanion, NotFound
+│
+├── server/                 # Express API
+│   └── src/
+│       ├── config/         # db.js (Mongo connection)
+│       ├── controllers/    # auth, issue, service, ai
+│       ├── middleware/     # auth, errorHandler
+│       ├── models/         # User, Issue, Service, ChatMessage
+│       ├── routes/         # authRoutes, issueRoutes, serviceRoutes, aiRoutes
+│       ├── data/           # seedServices.js
+│       ├── app.js
+│       └── server.js
+│
+├── docs/                   # API.md, ARCHITECTURE.md
+├── .github/workflows/      # CI
 ├── docker-compose.yml
-└── package.json     # root scripts (runs client + server together)
+├── README.md
+└── LICENSE
 ```
 
-## Getting started
+---
 
-### 1. Prerequisites
+## 🚀 Getting Started
 
-- Node.js 20+
-- MongoDB running locally, or via `docker-compose up mongo`
-- An Anthropic API key (for the AI companion) — get one at
-  [console.anthropic.com](https://console.anthropic.com)
-
-### 2. Install
+### Clone the repository
 
 ```bash
-git clone <this-repo-url>
-cd CivicAI
-npm run install:all
+git clone https://github.com/ManjeetShaw/Sahyogi.git
+cd Sahyogi
 ```
 
-### 3. Configure environment variables
+### Backend setup
 
 ```bash
-cp server/.env.example server/.env
-cp client/.env.example client/.env
+cd server
+npm install
+cp .env.example .env
 ```
 
-Edit `server/.env` and set at minimum:
+Fill in `.env`:
 
-```
+```env
+PORT=5000
+NODE_ENV=development
 MONGO_URI=mongodb://localhost:27017/civicai
-JWT_SECRET=some_long_random_string
-ANTHROPIC_API_KEY=sk-ant-...
+JWT_SECRET=replace_with_a_long_random_string
+JWT_EXPIRES_IN=7d
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+ANTHROPIC_MODEL=claude-sonnet-4-6
+CLIENT_ORIGIN=http://localhost:5173
 ```
-
-### 4. Seed sample government services (optional but recommended)
-
-```bash
-npm run seed
-```
-
-### 5. Run it
 
 ```bash
 npm run dev
 ```
 
-- Client: http://localhost:5173
-- Server: http://localhost:5000/api/health
+### Frontend setup
 
-## Roles
-
-New sign-ups are created as `citizen`. To promote a user to `staff` or
-`admin` (so they can update issue statuses or manage the services
-directory), update their `role` field directly in MongoDB for now:
-
-```js
-db.users.updateOne({ email: "you@example.com" }, { $set: { role: "admin" } })
+```bash
+cd client
+npm install
+npm run dev
 ```
 
-A proper admin UI for role management is a good first contribution — see
-`CONTRIBUTING.md`.
+The client proxies `/api` requests to the server in development (see `vite.config.js`).
 
-## Docs
+### Or run everything with Docker
 
-- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — system design and why
-  the AI key stays server-side
-- [`docs/API.md`](docs/API.md) — full REST API reference
+```bash
+docker-compose up --build
+```
 
-## License
+### Seed sample government services
 
-MIT — see [LICENSE](LICENSE).
+```bash
+npm run seed --prefix server
+```
+
+---
+
+## 🔒 Security
+
+- JWT authentication, hashed passwords (bcrypt)
+- Rate limiting on the API
+- Environment-variable-based secrets (never committed)
+- AI API key kept server-side only
+
+---
+
+## 📈 Roadmap
+
+What's built vs. what's planned for the full long-term vision:
+
+- [x] Project setup, backend foundation, database models
+- [x] JWT authentication
+- [x] Issue/complaint reporting & tracking
+- [x] Government services directory
+- [x] AI companion chat (Claude)
+- [ ] AI-powered scheme eligibility recommendation engine
+- [ ] Document checklist assistant (photo specs, fees, rejection reasons)
+- [ ] Image upload + AI image analysis for issue reports
+- [ ] Map-based location picker & "nearby offices" lookup
+- [ ] Multilingual support (Hindi, Bengali, Tamil, Telugu, Marathi, and more)
+- [ ] Voice assistant (speech-to-text / text-to-speech)
+- [ ] User dashboard (chat history, saved items, notifications)
+- [ ] Government notice simplifier
+- [ ] Production deployment & performance optimization
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push your branch
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+MIT — see [LICENSE](./LICENSE).
+
+---
+
+## 💡 Vision
+
+Bridge the gap between citizens and government services by using AI to make public services more accessible, transparent, and easy to navigate — starting simple and working toward the fuller vision above.
+
+Made with ❤️ for Digital India 🇮🇳
