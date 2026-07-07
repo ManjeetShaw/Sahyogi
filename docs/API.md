@@ -28,7 +28,7 @@ All authenticated routes require `Authorization: Bearer <token>`.
 |--------|--------------------|---------------------|---------------|
 | GET    | `/services`        | `?category=&q=`     | Public        |
 | GET    | `/services/:id`    | -                    | Public        |
-| POST   | `/services`        | `{ title, description, category, howToApply, link }` | admin only |
+| POST   | `/services`        | `{ title, description, category, howToApply, eligibility, requiredDocuments[], link }` | admin only |
 | PUT    | `/services/:id`    | same as above        | admin only    |
 | DELETE | `/services/:id`    | -                     | admin only    |
 

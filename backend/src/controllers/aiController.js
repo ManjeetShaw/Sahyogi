@@ -39,13 +39,17 @@ export async function chat(req, res, next) {
 
     // Ground the assistant in the platform's actual services data so it
     // doesn't invent offices, forms, or eligibility rules.
-    const services = await Service.find({}).limit(30).select("title description category howToApply");
+    const services = await Service.find({})
+      .limit(30)
+      .select("title description category howToApply eligibility requiredDocuments");
     const servicesContext = services.length
       ? services
-          .map(
-            (s) =>
-              `- [${s.category}] ${s.title}: ${s.description} (How to apply: ${s.howToApply})`
-          )
+          .map((s) => {
+            const parts = [`- [${s.category}] ${s.title}: ${s.description} (How to apply: ${s.howToApply})`];
+            if (s.eligibility) parts.push(`  Eligibility: ${s.eligibility}`);
+            if (s.requiredDocuments?.length) parts.push(`  Required documents: ${s.requiredDocuments.join(", ")}`);
+            return parts.join("\n");
+          })
           .join("\n")
       : "No services are currently listed on the platform.";
 

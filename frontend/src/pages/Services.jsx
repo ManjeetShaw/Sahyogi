@@ -62,6 +62,17 @@ export default function Services() {
               <h3 style={{ margin: 0 }}>{s.title}</h3>
               <p style={{ margin: 0 }}>{s.description}</p>
               <p className="form-note" style={{ margin: 0 }}><strong>How to apply:</strong> {s.howToApply}</p>
+              {s.eligibility && (
+                <p className="form-note" style={{ margin: 0 }}><strong>Eligibility:</strong> {s.eligibility}</p>
+              )}
+              {s.requiredDocuments?.length > 0 && (
+                <div className="form-note" style={{ margin: 0 }}>
+                  <strong>Required documents:</strong>
+                  <ul style={{ margin: "4px 0 0", paddingLeft: 18 }}>
+                    {s.requiredDocuments.map((doc, i) => <li key={i}>{doc}</li>)}
+                  </ul>
+                </div>
+              )}
               {s.link && <a href={s.link} target="_blank" rel="noreferrer">Official link ↗</a>}
             </div>
           ))}

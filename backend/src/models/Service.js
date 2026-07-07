@@ -17,6 +17,8 @@ const serviceSchema = new mongoose.Schema(
       required: true,
     },
     howToApply: { type: String, required: true },
+    eligibility: { type: String, trim: true },
+    requiredDocuments: [{ type: String, trim: true }],
     link: { type: String, trim: true },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },

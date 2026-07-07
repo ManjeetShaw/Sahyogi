@@ -26,12 +26,12 @@ export async function getService(req, res, next) {
 
 export async function createService(req, res, next) {
   try {
-    const { title, description, category, howToApply, link } = req.body;
+    const { title, description, category, howToApply, eligibility, requiredDocuments, link } = req.body;
     if (!title || !description || !category || !howToApply) {
       return res.status(400).json({ message: "Title, description, category, and howToApply are required." });
     }
     const service = await Service.create({
-      title, description, category, howToApply, link, createdBy: req.user.id,
+      title, description, category, howToApply, eligibility, requiredDocuments, link, createdBy: req.user.id,
     });
     res.status(201).json({ service });
   } catch (err) {
