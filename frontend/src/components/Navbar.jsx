@@ -14,8 +14,8 @@ export default function Navbar() {
     <header className="navbar">
       <div className="navbar-inner">
         <NavLink to="/" className="brand" style={{ textDecoration: "none" }}>
-          <span className="brand-mark">CA</span>
-          CivicAI
+          <span className="brand-mark">SY</span>
+          Sahyogi
         </NavLink>
         <nav className="nav-links">
           <NavLink to="/services" className={({ isActive }) => (isActive ? "active" : "")}>
@@ -23,6 +23,9 @@ export default function Navbar() {
           </NavLink>
           {user && (
             <>
+              <NavLink to="/dashboard" className={({ isActive }) => (isActive ? "active" : "")}>
+                Dashboard
+              </NavLink>
               <NavLink to="/issues" className={({ isActive }) => (isActive ? "active" : "")}>
                 Issues
               </NavLink>
@@ -31,6 +34,12 @@ export default function Navbar() {
               </NavLink>
               <NavLink to="/companion" className={({ isActive }) => (isActive ? "active" : "")}>
                 AI companion
+              </NavLink>
+              <NavLink to="/scheme-finder" className={({ isActive }) => (isActive ? "active" : "")}>
+                Scheme finder
+              </NavLink>
+              <NavLink to="/notice-simplifier" className={({ isActive }) => (isActive ? "active" : "")}>
+                Notice simplifier
               </NavLink>
             </>
           )}

@@ -3,7 +3,7 @@ version: "3.9"
 services:
   mongo:
     image: mongo:7
-    container_name: civicai-mongo
+    container_name: sahyogi-mongo
     restart: unless-stopped
     ports:
       - "27017:27017"
@@ -12,20 +12,20 @@ services:
 
   backend:
     build: ./backend
-    container_name: civicai-backend
+    container_name: sahyogi-backend
     restart: unless-stopped
     ports:
       - "5000:5000"
     env_file:
       - ./backend/.env
     environment:
-      - MONGO_URI=mongodb://mongo:27017/civicai
+      - MONGO_URI=mongodb://mongo:27017/sahyogi
     depends_on:
       - mongo
 
   frontend:
     build: ./frontend
-    container_name: civicai-frontend
+    container_name: sahyogi-frontend
     restart: unless-stopped
     ports:
       - "5173:5173"

@@ -1,8 +1,8 @@
 {
-  "name": "civicai",
+  "name": "sahyogi",
   "version": "1.0.0",
   "private": true,
-  "description": "GenAI-powered civic platform: government services access, public issue reporting, and an AI companion.",
+  "description": "GenAI-powered civic platform: government services access, public issue reporting, and an AI companion (Sahyogi).",
   "scripts": {
     "dev": "concurrently -n BACKEND,FRONTEND -c blue,green \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
     "backend": "npm run dev --prefix backend",

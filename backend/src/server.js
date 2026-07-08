@@ -10,7 +10,7 @@ async function start() {
   try {
     await connectDB();
     app.listen(PORT, () => {
-      console.log(`[server] CivicAI API running on http://localhost:${PORT}`);
+      console.log(`[server] Sahyogi API running on http://localhost:${PORT}`);
     });
   } catch (err) {
     console.error("[server] Failed to start:", err.message);

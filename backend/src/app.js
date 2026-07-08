@@ -34,7 +34,7 @@ if (process.env.NODE_ENV !== "test") {
 }
 
 app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", service: "CivicAI API", time: new Date().toISOString() });
+  res.json({ status: "ok", service: "Sahyogi API", time: new Date().toISOString() });
 });
 
 app.use("/api/auth", authRoutes);

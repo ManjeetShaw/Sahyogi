@@ -1,6 +1,6 @@
 import { Router } from "express";
 import rateLimit from "express-rate-limit";
-import { chat, history } from "../controllers/aiController.js";
+import { chat, history, recommend, simplify } from "../controllers/aiController.js";
 import { protect } from "../middleware/auth.js";
 
 const router = Router();
@@ -15,5 +15,7 @@ const aiLimiter = rateLimit({
 router.use(protect);
 router.post("/chat", aiLimiter, chat);
 router.get("/history", history);
+router.post("/recommend", aiLimiter, recommend);
+router.post("/simplify", aiLimiter, simplify);
 
 export default router;

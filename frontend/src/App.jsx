@@ -9,6 +9,9 @@ import Services from "./pages/Services.jsx";
 import Issues from "./pages/Issues.jsx";
 import ReportIssue from "./pages/ReportIssue.jsx";
 import AICompanion from "./pages/AICompanion.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import SchemeFinder from "./pages/SchemeFinder.jsx";
+import NoticeSimplifier from "./pages/NoticeSimplifier.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 export default function App() {
@@ -45,11 +48,35 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/scheme-finder"
+            element={
+              <ProtectedRoute>
+                <SchemeFinder />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/notice-simplifier"
+            element={
+              <ProtectedRoute>
+                <NoticeSimplifier />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <footer className="footer">
-        <div className="container">CivicAI — an open, community-driven civic platform.</div>
+        <div className="container">Sahyogi — an open, community-driven civic platform.</div>
       </footer>
     </div>
   );
