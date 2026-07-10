@@ -1,18 +1,36 @@
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenAI } from "@google/genai";
 import Service from "../models/Service.js";
 import ChatMessage from "../models/ChatMessage.js";
 
-let anthropic = null;
+let gemini = null;
 function getClient() {
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!process.env.GEMINI_API_KEY) {
     throw new Error(
-      "ANTHROPIC_API_KEY is not set on the server. Add it to backend/.env to enable the AI companion."
+      "GEMINI_API_KEY is not set on the server. Add it to backend/.env to enable the AI companion."
     );
   }
-  if (!anthropic) {
-    anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  if (!gemini) {
+    gemini = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
   }
-  return anthropic;
+  return gemini;
+}
+
+function getModel() {
+  return process.env.GEMINI_MODEL || "gemini-2.5-flash";
+}
+
+// Gemini's `contents` array uses role "model" for the assistant turn (not
+// "assistant" like Anthropic/OpenAI), and each turn's text goes in `parts`.
+function toGeminiContents(history, latestUserMessage) {
+  const turns = history
+    .filter((h) => h && (h.role === "user" || h.role === "assistant") && h.content)
+    .slice(-10)
+    .map((h) => ({
+      role: h.role === "assistant" ? "model" : "user",
+      parts: [{ text: h.content }],
+    }));
+  turns.push({ role: "user", parts: [{ text: latestUserMessage }] });
+  return turns;
 }
 
 const SYSTEM_PROMPT = `You are the Sahyogi companion, a plain-language assistant that helps
@@ -32,7 +50,7 @@ Rules:
 
 export async function chat(req, res, next) {
   try {
-    const { message, history = [] } = req.body;
+    const { message, history: chatHistory = [] } = req.body;
     if (!message || typeof message !== "string") {
       return res.status(400).json({ message: "A `message` string is required." });
     }
@@ -55,25 +73,16 @@ export async function chat(req, res, next) {
 
     const client = getClient();
 
-    const conversation = [
-      ...history
-        .filter((h) => h && (h.role === "user" || h.role === "assistant") && h.content)
-        .slice(-10),
-      { role: "user", content: message },
-    ];
-
-    const response = await client.messages.create({
-      model: process.env.ANTHROPIC_MODEL || "claude-sonnet-4-6",
-      max_tokens: 700,
-      system: `${SYSTEM_PROMPT}\n\nCurrent services on the platform:\n${servicesContext}`,
-      messages: conversation,
+    const response = await client.models.generateContent({
+      model: getModel(),
+      contents: toGeminiContents(chatHistory, message),
+      config: {
+        systemInstruction: `${SYSTEM_PROMPT}\n\nCurrent services on the platform:\n${servicesContext}`,
+        maxOutputTokens: 700,
+      },
     });
 
-    const reply = response.content
-      .filter((block) => block.type === "text")
-      .map((block) => block.text)
-      .join("\n")
-      .trim();
+    const reply = (response.text || "").trim();
 
     await ChatMessage.create({ user: req.user.id, message, reply });
 
@@ -100,28 +109,27 @@ export async function recommend(req, res, next) {
       .join("\n");
 
     const client = getClient();
-    const response = await client.messages.create({
-      model: process.env.ANTHROPIC_MODEL || "claude-sonnet-4-6",
-      max_tokens: 600,
-      system:
-        "You are a scheme-matching assistant for a government services platform. " +
-        "You are given a catalog of services as lines of `id|category|title|eligibility`, and a citizen's " +
-        "description of their situation. Reply with ONLY a JSON array (no prose, no markdown fences) of up to 5 " +
-        'objects: [{"id": "<service id from the catalog>", "reason": "<one short plain-language sentence>"}]. ' +
-        "Only include services whose id appears in the catalog. If nothing plausibly matches, return [].",
-      messages: [
+    const response = await client.models.generateContent({
+      model: getModel(),
+      contents: [
         {
           role: "user",
-          content: `Service catalog:\n${catalog}\n\nCitizen's situation: ${situation}`,
+          parts: [{ text: `Service catalog:\n${catalog}\n\nCitizen's situation: ${situation}` }],
         },
       ],
+      config: {
+        systemInstruction:
+          "You are a scheme-matching assistant for a government services platform. " +
+          "You are given a catalog of services as lines of `id|category|title|eligibility`, and a citizen's " +
+          "description of their situation. Reply with ONLY a JSON array (no prose, no markdown fences) of up to 5 " +
+          'objects: [{"id": "<service id from the catalog>", "reason": "<one short plain-language sentence>"}]. ' +
+          "Only include services whose id appears in the catalog. If nothing plausibly matches, return [].",
+        maxOutputTokens: 600,
+        responseMimeType: "application/json",
+      },
     });
 
-    const raw = response.content
-      .filter((block) => block.type === "text")
-      .map((block) => block.text)
-      .join("")
-      .trim();
+    const raw = (response.text || "").trim();
 
     let parsed = [];
     try {
@@ -153,23 +161,21 @@ export async function simplify(req, res, next) {
     }
 
     const client = getClient();
-    const response = await client.messages.create({
-      model: process.env.ANTHROPIC_MODEL || "claude-sonnet-4-6",
-      max_tokens: 700,
-      system:
-        "You simplify official government notices, letters, and forms into plain language for citizens. " +
-        "Structure your reply as: a one-sentence summary of what the notice is about, then a short bulleted list " +
-        "of any actions the recipient must take with deadlines if present, then a short bulleted list of any " +
-        "fees or penalties mentioned. Do not invent details that aren't in the notice. If something is unclear " +
-        "or illegible, say so plainly instead of guessing.",
-      messages: [{ role: "user", content: noticeText }],
+    const response = await client.models.generateContent({
+      model: getModel(),
+      contents: [{ role: "user", parts: [{ text: noticeText }] }],
+      config: {
+        systemInstruction:
+          "You simplify official government notices, letters, and forms into plain language for citizens. " +
+          "Structure your reply as: a one-sentence summary of what the notice is about, then a short bulleted list " +
+          "of any actions the recipient must take with deadlines if present, then a short bulleted list of any " +
+          "fees or penalties mentioned. Do not invent details that aren't in the notice. If something is unclear " +
+          "or illegible, say so plainly instead of guessing.",
+        maxOutputTokens: 700,
+      },
     });
 
-    const simplified = response.content
-      .filter((block) => block.type === "text")
-      .map((block) => block.text)
-      .join("\n")
-      .trim();
+    const simplified = (response.text || "").trim();
 
     res.json({ simplified });
   } catch (err) {

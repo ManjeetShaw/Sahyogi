@@ -12,7 +12,7 @@ Sahyogi (working codename **SarkarSaathi AI**) is a citizen platform that simpli
 
 This is the real, working state of the codebase today (not the full long-term vision below):
 
-- **AI Companion Chat** — citizens can ask natural-language questions and get answers grounded in the platform's own services data, powered by the Anthropic Claude API. Supports optional voice input (speech-to-text) and read-aloud replies (text-to-speech) in supporting browsers.
+- **AI Companion Chat** — citizens can ask natural-language questions and get answers grounded in the platform's own services data, powered by the Google Gemini API. Supports optional voice input (speech-to-text) and read-aloud replies (text-to-speech) in supporting browsers.
 - **AI Scheme/Service Finder** — describe your situation in plain language and get matching services from the platform's own catalog, with a short reason for each match.
 - **AI Notice Simplifier** — paste an official notice and get a plain-language summary of what it means and what action, if any, is required.
 - **Issue Reporting** — citizens can submit civic issues (potholes, garbage, water supply, etc.) with category, description, and location; status tracked (submitted → in review → in progress → resolved)
@@ -25,7 +25,7 @@ This is the real, working state of the codebase today (not the full long-term vi
 
 **Frontend:** React (Vite), React Router, Axios, plain CSS
 **Backend:** Node.js, Express.js, MongoDB + Mongoose, JWT auth, bcrypt, express-rate-limit, morgan
-**AI:** Anthropic Claude API (`@anthropic-ai/sdk`), server-side only — the API key never touches the client
+**AI:** Google Gemini API (`@google/genai`), server-side only — the API key never touches the client
 
 ---
 
@@ -87,8 +87,8 @@ NODE_ENV=development
 MONGO_URI=mongodb://localhost:27017/sahyogi
 JWT_SECRET=replace_with_a_long_random_string
 JWT_EXPIRES_IN=7d
-ANTHROPIC_API_KEY=your_anthropic_api_key_here
-ANTHROPIC_MODEL=claude-sonnet-4-6
+GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_MODEL=gemini-2.5-flash
 CLIENT_ORIGIN=http://localhost:5173
 ```
 
@@ -137,7 +137,7 @@ What's built vs. what's planned for the full long-term vision:
 - [x] JWT authentication
 - [x] Issue/complaint reporting & tracking
 - [x] Government services directory
-- [x] AI companion chat (Claude)
+- [x] AI companion chat (Gemini)
 - [x] AI-powered scheme eligibility recommendation engine
 - [x] Document checklist assistant (photo specs, fees, rejection reasons)
 - [x] User dashboard (chat history, saved items) — notifications not yet built
