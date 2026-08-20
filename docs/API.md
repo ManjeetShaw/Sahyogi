@@ -36,7 +36,7 @@ All authenticated routes require `Authorization: Bearer <token>`.
 
 | Method | Route            | Body                     | Notes                                                        |
 |--------|------------------|---------------------------|---------------------------------------------------------------|
-| POST   | `/ai/chat`       | `{ message, history }`    | Calls Claude server-side, grounded in services data           |
+| POST   | `/ai/chat`       | `{ message, history }`    | Calls Google Gemini server-side, grounded in services data           |
 | GET    | `/ai/history`    | -                          | Returns the caller's last 50 chat exchanges                   |
 | POST   | `/ai/recommend`  | `{ situation }`            | Matches a free-text situation against the services catalog    |
 | POST   | `/ai/simplify`   | `{ noticeText }`           | Plain-language summary of a pasted government notice          |
