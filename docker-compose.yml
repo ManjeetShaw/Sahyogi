@@ -29,6 +29,8 @@ services:
     restart: unless-stopped
     ports:
       - "5173:5173"
+    environment:
+      - VITE_DEV_PROXY_TARGET=http://backend:5000
     depends_on:
       - backend
 
