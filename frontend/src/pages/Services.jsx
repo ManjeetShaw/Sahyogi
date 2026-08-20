@@ -17,37 +17,58 @@ export default function Services() {
   const [category, setCategory] = useState("");
   const [q, setQ] = useState("");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [savedIds, setSavedIds] = useState(new Set());
 
-  useEffect(() => {
+  function loadServices() {
     setLoading(true);
+    setError("");
     const params = {};
     if (category) params.category = category;
     if (q) params.q = q;
     api
       .get("/services", { params })
       .then((res) => setServices(res.data.services))
+      .catch((err) => {
+        setServices([]);
+        setError(
+          err.response?.data?.message ||
+            "Couldn't load services right now. Check your connection and try again."
+        );
+      })
       .finally(() => setLoading(false));
-  }, [category, q]);
+  }
+
+  useEffect(loadServices, [category, q]);
 
   useEffect(() => {
     if (!user) return;
-    api.get("/services/saved").then((res) => {
-      setSavedIds(new Set(res.data.services.map((s) => s._id)));
-    });
+    api
+      .get("/services/saved")
+      .then((res) => {
+        setSavedIds(new Set(res.data.services.map((s) => s._id)));
+      })
+      .catch(() => {
+        // Saved-state is a non-critical enhancement (star icons); a failure
+        // here shouldn't block the services list from rendering.
+      });
   }, [user]);
 
   async function toggleSave(id) {
-    if (savedIds.has(id)) {
-      await api.delete(`/services/${id}/save`);
-      setSavedIds((prev) => {
-        const next = new Set(prev);
-        next.delete(id);
-        return next;
-      });
-    } else {
-      await api.post(`/services/${id}/save`);
-      setSavedIds((prev) => new Set(prev).add(id));
+    try {
+      if (savedIds.has(id)) {
+        await api.delete(`/services/${id}/save`);
+        setSavedIds((prev) => {
+          const next = new Set(prev);
+          next.delete(id);
+          return next;
+        });
+      } else {
+        await api.post(`/services/${id}/save`);
+        setSavedIds((prev) => new Set(prev).add(id));
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || "Couldn't update saved services. Please try again.");
     }
   }
 
@@ -73,6 +94,14 @@ export default function Services() {
 
       {loading ? (
         <p>Loading services...</p>
+      ) : error ? (
+        <div className="empty-state">
+          <h3>Couldn&apos;t load services</h3>
+          <p>{error}</p>
+          <button className="btn btn-outline" onClick={loadServices} style={{ marginTop: 8 }}>
+            Retry
+          </button>
+        </div>
       ) : services.length === 0 ? (
         <div className="empty-state">
           <h3>No services found</h3>
