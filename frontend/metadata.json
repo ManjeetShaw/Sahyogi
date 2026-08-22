@@ -1,0 +1,6 @@
+{
+  "name": "Sahyogi",
+  "description": "Civic governance and community empowerment platform with AI companion, service finder, and community voice issue reporting.",
+  "requestFramePermissions": ["geolocation", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
